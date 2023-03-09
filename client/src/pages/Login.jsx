@@ -4,18 +4,73 @@ import { RxEyeOpen, RxEyeClosed } from 'react-icons/rx'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebook } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import Cookies from 'universal-cookie'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
-	const [passHidden, setPassHidden] = useState(true)
+	const cookies = new Cookies()
+	const navigate = useNavigate()
 
-	const handleLoginFormSubmit = (e) => {
+	const [passHidden, setPassHidden] = useState(true)
+	const [formData, setFormData] = useState(null)
+
+	const handleLoginFormSubmit = async (e) => {
 		e.preventDefault()
+
+		const response = await fetch('http://localhost:5000/api/auth/login', {
+			method: 'POST',
+			body: JSON.stringify(formData),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+
+		const data = await response.json()
+
+		if (data.success) {
+			toast.success('Logged In successfully!', {
+				position: "top-left",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "light",
+			})
+
+			cookies.set('authToken', data.authToken)
+
+			setFormData(null)
+
+			setTimeout(() => {
+				navigate('/')
+			}, 1000)
+		} else {
+			toast.error(data.error, {
+				position: "top-left",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "light",
+			})
+
+			console.error(data)
+		}
 	}
 
 	const togglePassHidden = () => {
 		passHidden
 			? setPassHidden(false)
 			: setPassHidden(true)
+	}
+
+	const handleOnChange = (e) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value })
 	}
 
 	return (
@@ -28,14 +83,14 @@ const Login = () => {
 
 					<form className="body mt-8 flex flex-col justify-center items-center space-y-8" onSubmit={ handleLoginFormSubmit }>
 						<div className="input-group w-1/2 rounded relative">
-							<label htmlFor="email" className='absolute -top-3 left-3 bg-white px-[7px]'>Email</label>
-							<input type="text" id='email' name='email' className='outline-none border-2 border-slate-300 focus:border-indigo-500 p-3 rounded duration-150 w-full' />
+							<label htmlFor="email" className='absolute -top-3 left-3 bg-white px-[7px]'>Username or Email</label>
+							<input type="text" id='email' name='email' className='outline-none border-2 border-slate-300 focus:border-indigo-500 p-3 rounded duration-150 w-full' onChange={ handleOnChange } required />
 							<HiOutlineMail className='absolute right-2 top-3 text-2xl' />
 						</div>
 
 						<div className="input-group w-1/2 rounded relative">
 							<label htmlFor="password" className='absolute -top-3 left-3 bg-white px-[7px]'>Password</label>
-							<input type={ `${passHidden ? 'password' : 'text'}` } id='password' name='password' className={ `outline-none border-2 border-slate-300 focus:border-indigo-500 p-3 rounded duration-150 w-full ${passHidden && 'tracking-widest'}` } />
+							<input type={ `${passHidden ? 'password' : 'text'}` } id='password' name='password' className={ `outline-none border-2 border-slate-300 focus:border-indigo-500 p-3 rounded duration-150 w-full ${passHidden && 'tracking-widest'}` } onChange={ handleOnChange } minLength={ 8 } required />
 							{ passHidden ?
 								< RxEyeClosed className={ `absolute right-2 top-2 text-4xl cursor-pointer hover:bg-slate-100 rounded-full p-2 duration-150` } onClick={ togglePassHidden } /> :
 								< RxEyeOpen className={ `absolute right-2 top-2 text-4xl cursor-pointer hover:bg-slate-100 rounded-full p-2 duration-150` } onClick={ togglePassHidden } />

@@ -11,6 +11,8 @@ import AboutUs from './pages/AboutUs'
 import ContacUs from './pages/ContactUs'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
 
@@ -18,6 +20,20 @@ function App() {
     <>
       <BrowserRouter>
         <Navbar />
+
+        <ToastContainer
+          position="top-left"
+          autoClose={ 5000 }
+          hideProgressBar={ false }
+          newestOnTop={ false }
+          closeOnClick
+          rtl={ false }
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+
         <div className="py-10 bg-zinc-100 min-h-screen">
           <Routes>
             <Route path='/' element={ <Home /> } />
