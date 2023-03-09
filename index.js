@@ -16,6 +16,7 @@ app.use(cors())
 // api endpoints
 app.use('/api/user', require('./routes/user'))
 app.use('/api/auth', require('./routes/auth'))
+app.use('/api/products', require('./routes/product'))
 
 app.listen(process.env.PORT, () => {
 	console.log(`Server running at http://127.0.0.1:${process.env.PORT}`)

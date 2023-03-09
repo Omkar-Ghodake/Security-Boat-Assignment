@@ -11,18 +11,10 @@ const ProductSchema = new Schema(
 			type: String,
 			required: true
 		},
-		images: [
-			{
-				public_id: {
-					type: String,
-					required: true
-				},
-				url: {
-					type: String,
-					required: true
-				}
-			}
-		],
+		image: {
+			type: String,
+			require: true
+		},
 		categories: {
 			type: Array,
 			required: true

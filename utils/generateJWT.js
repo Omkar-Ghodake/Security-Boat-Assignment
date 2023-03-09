@@ -14,7 +14,7 @@ const generateJWT = async (res, user, tokenExpiry) => {
 	}
 
 	const authToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: tokenExpiry })
-	return res.json({ success: true, authToken })
+	return res.json({ success: true, username: user.username, authToken })
 }
 
 module.exports = generateJWT
