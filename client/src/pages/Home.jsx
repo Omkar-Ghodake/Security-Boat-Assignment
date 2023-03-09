@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import ProductCard from '../layouts/ProductCard'
 import { Link } from 'react-router-dom'
+import { ProductContext } from '../../context/ProductsState'
 
 const Home = () => {
 	const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+	const { allProducts } = useContext(ProductContext)
 
 	return (
 		<>
@@ -11,8 +14,15 @@ const Home = () => {
 			<div className='border w-1/2 mx-auto mt-5'></div>
 			<div className='container mx-auto flex flex-wrap justify-evenly'>
 				{
-					arr.slice(0, 9).map((element, index) => {
-						return <ProductCard key={ index } />
+					allProducts.length > 0 && allProducts.slice(0, 9).map((product, index) => {
+						return (
+							<ProductCard key={ index }
+								productId={ product._id }
+								title={ product.title }
+								desc={ product.desc }
+								price={ product.price }
+							/>
+						)
 					})
 				}
 			</div>

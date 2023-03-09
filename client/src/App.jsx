@@ -28,6 +28,7 @@ import AddProducts from './pages/AddProducts'
 // contexts
 import { UserState } from '../context/UserState'
 import { ProductsState } from '../context/ProductsState'
+import ProductDetails from './pages/ProductDetails'
 
 
 
@@ -61,7 +62,8 @@ function App() {
                 <Route path='/contactus' element={ <ContacUs /> } />
                 <Route path='/login' element={ <Login /> } />
                 <Route path='/signup' element={ <Signup /> } />
-                <Route path='/profile:userId' element={ <Profile /> } />
+                <Route path='/profile/:userId' element={ <Profile /> } />
+                <Route path='/product/:productId' element={ <ProductDetails /> } />
                 <Route path='/allUsers' element={ <AllUsers /> } />
                 <Route path='/adminDashboard' element={ <AdminDashboard /> } />
                 <Route path='/staffDashboard' element={ <StaffDashboard /> } />
